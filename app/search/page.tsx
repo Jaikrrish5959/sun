@@ -56,47 +56,47 @@ export default function SearchPage() {
   });
 
   return (
-    <div>
+    <div className="animate-fade-in">
       <Header title="Advanced Search & Filters" subtitle="Filter land properties by survey number, district, facing, price range and legal status" />
 
-      <div className="p-8 space-y-6 max-w-7xl mx-auto">
+      <div className="p-8 md:p-10 lg:p-12 space-y-8 max-w-7xl mx-auto">
         {/* Filters Panel */}
-        <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-          <div className="flex items-center justify-between border-b pb-3">
-            <h3 className="text-xs font-bold text-[#1B2A4A] uppercase tracking-wider flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#D4AF37]" />
+        <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+            <h3 className="text-sm font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-2.5">
+              <Filter className="w-4 h-4 text-[#F0A500]" />
               Multi-Field Property Filter Engine
             </h3>
             <button
               onClick={handleReset}
-              className="text-xs text-slate-500 hover:text-[#1B2A4A] font-semibold flex items-center gap-1"
+              className="text-xs text-slate-500 hover:text-[#1A2455] font-extrabold flex items-center gap-1.5 px-3 py-1.5 rounded-xl hover:bg-slate-100 transition"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset Filters</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1">Keyword Search</label>
+              <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Keyword Search</label>
               <div className="relative">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3.5" />
                 <input
                   type="text"
                   placeholder="Ref No, Title, Owner, Location, Survey No..."
                   value={filters.searchQuery}
                   onChange={(e) => setFilters({ ...filters, searchQuery: e.target.value })}
-                  className="w-full pl-9 pr-3 py-2 text-xs border rounded-lg border-slate-300 focus:ring-2 focus:ring-[#1B2A4A]"
+                  className="w-full pl-11 pr-4 py-3 text-xs border rounded-xl border-slate-200 bg-slate-50/70 focus:bg-white transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Status</label>
+              <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Status</label>
               <select
                 value={filters.status}
                 onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                className="w-full px-3 py-2 text-xs border rounded-lg border-slate-300 bg-white"
+                className="w-full px-4 py-3 text-xs font-semibold border rounded-xl border-slate-200 bg-slate-50/70 focus:bg-white"
               >
                 <option value="All">All Statuses</option>
                 <option value="Active">Active</option>
@@ -106,11 +106,11 @@ export default function SearchPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Property Type</label>
+              <label className="block text-xs font-black uppercase tracking-wider text-slate-700 mb-2">Property Type</label>
               <select
                 value={filters.propertyType}
                 onChange={(e) => setFilters({ ...filters, propertyType: e.target.value })}
-                className="w-full px-3 py-2 text-xs border rounded-lg border-slate-300 bg-white"
+                className="w-full px-4 py-3 text-xs font-semibold border rounded-xl border-slate-200 bg-slate-50/70 focus:bg-white"
               >
                 <option value="All">All Types</option>
                 <option value="Commercial">Commercial</option>

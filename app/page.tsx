@@ -2,227 +2,225 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Header } from '@/components/layout/Header';
-import { getStoredProperties, getPDFHistory, duplicateProperty, deleteProperty } from '@/lib/storage';
-import { Property, PDFHistoryRecord } from '@/lib/types';
+import { getStoredProperties, getPDFHistory } from '@/lib/storage';
+import { Property } from '@/lib/types';
 import {
-  Building2,
-  FileCheck2,
-  FileClock,
-  CheckCircle,
-  Plus,
-  ArrowRight,
-  Download,
-  Copy,
-  Trash2,
-  Edit,
-  FileText,
-  Search,
-  TrendingUp,
+  Building2, FileCheck2, FileClock, TrendingUp,
+  Plus, ArrowRight, Eye, Edit, MapPin, Calendar,
 } from 'lucide-react';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [properties, setProperties] = useState<Property[]>([]);
-  const [history, setHistory] = useState<PDFHistoryRecord[]>([]);
-
-  const loadData = () => {
-    setProperties(getStoredProperties());
-    setHistory(getPDFHistory());
-  };
+  const [pdfCount, setPdfCount] = useState(0);
 
   useEffect(() => {
-    loadData();
+    const props = getStoredProperties();
+    setProperties(props);
+    setPdfCount(getPDFHistory().length);
   }, []);
 
-  const handleDuplicate = (id: string) => {
-    duplicateProperty(id);
-    loadData();
-  };
+  const active  = properties.filter(p => p.status === 'Active').length;
+  const drafts  = properties.filter(p => p.status === 'Draft').length;
+  const total   = properties.length;
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this property listing?')) {
-      deleteProperty(id);
-      loadData();
-    }
-  };
+  const stats = [
+    { label: 'Total Properties', value: total,    icon: Building2,   color: '#3B82F6', bg: '#EFF6FF' },
+    { label: 'Active Listings',  value: active,   icon: TrendingUp,  color: '#10B981', bg: '#ECFDF5' },
+    { label: 'Saved Drafts',     value: drafts,   icon: FileClock,   color: '#F59E0B', bg: '#FFFBEB' },
+    { label: 'PDFs Generated',   value: pdfCount, icon: FileCheck2,  color: '#8B5CF6', bg: '#F5F3FF' },
+  ];
 
-  const activeProperties = properties.filter((p) => p.status === 'Active');
-  const draftProperties = properties.filter((p) => p.status === 'Draft');
+  const recent = [...properties].sort((a,b) =>
+    new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  ).slice(0, 6);
 
   return (
-    <div>
-      <Header title="Dashboard Overview" subtitle="Real-time SUN REALTORS property statistics and PDF generation hub" />
+    <div className="animate-fade-in">
+      <Header
+        title="Dashboard"
+        subtitle="SUN REALTORS Property Management System"
+      />
 
-      <div className="p-8 space-y-8 max-w-7xl mx-auto">
-        {/* Banner */}
-        <div className="bg-gradient-to-r from-[#0F1E36] via-[#1B2A4A] to-[#2D3E5F] rounded-2xl p-6 text-white shadow-lg border border-[#D4AF37]/30 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2">
-            <span className="px-2.5 py-1 rounded bg-[#D4AF37] text-[#0F1E36] text-[10px] font-extrabold uppercase tracking-wider">
-              Exact PDF Reproduction Engine Active
-            </span>
-            <h2 className="text-xl font-extrabold text-white">SUN REALTORS Property Studio</h2>
-            <p className="text-xs text-slate-300 max-w-xl">
-              Create land listings and instantly output pixel-perfect, authoritative 2-page A4 Land Property Specification Sheets matching your template 1.pdf reference.
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/properties/add"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B89320] text-[#0F1E36] text-xs font-extrabold hover:brightness-110 transition shadow-md whitespace-nowrap"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Add New Property</span>
-            </Link>
-            <Link
-              href="/pdf-generator"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition border border-white/20 whitespace-nowrap"
-            >
-              <FileText className="w-4 h-4 text-[#D4AF37]" />
-              <span>Live PDF Studio</span>
-            </Link>
-          </div>
-        </div>
+      <div style={{ padding: '32px', maxWidth: 1400, margin: '0 auto' }} className="space-y-8">
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-slate-500">Total Properties</p>
-              <h3 className="text-2xl font-extrabold text-[#1B2A4A] mt-1">{properties.length}</h3>
-              <p className="text-[10px] text-emerald-600 font-medium flex items-center gap-1 mt-1">
-                <TrendingUp className="w-3 h-3" /> All managed listings
-              </p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-[#1B2A4A]/5 border border-[#1B2A4A]/10 flex items-center justify-center text-[#1B2A4A]">
-              <Building2 className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-slate-500">Active Listings</p>
-              <h3 className="text-2xl font-extrabold text-emerald-600 mt-1">{activeProperties.length}</h3>
-              <p className="text-[10px] text-slate-400 mt-1">Ready for PDF export</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
-              <CheckCircle className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-slate-500">PDFs Generated</p>
-              <h3 className="text-2xl font-extrabold text-[#D4AF37] mt-1">{history.length}</h3>
-              <p className="text-[10px] text-slate-400 mt-1">Recorded export history</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-[#FAF5E8] border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37]">
-              <FileCheck2 className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-semibold text-slate-500">Saved Drafts</p>
-              <h3 className="text-2xl font-extrabold text-amber-600 mt-1">{draftProperties.length}</h3>
-              <p className="text-[10px] text-slate-400 mt-1">Incomplete forms</p>
-            </div>
-            <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
-              <FileClock className="w-6 h-6" />
-            </div>
-          </div>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+          {stats.map(s => {
+            const Icon = s.icon;
+            return (
+              <div key={s.label} className="card-hover"
+                style={{ background:'#fff', borderRadius:16, border:'1px solid #E2E8F0', padding:'20px 22px' }}>
+                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:12 }}>
+                  <div style={{
+                    width:38, height:38, borderRadius:10,
+                    background:s.bg, display:'flex', alignItems:'center', justifyContent:'center',
+                  }}>
+                    <Icon size={18} style={{ color: s.color }}/>
+                  </div>
+                </div>
+                <div style={{ fontSize:28, fontWeight:900, color:'#0F172A', lineHeight:1 }}>{s.value}</div>
+                <div style={{ fontSize:12, color:'#64748B', fontWeight:500, marginTop:4 }}>{s.label}</div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Recent Properties Section */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="p-5 border-b border-slate-200 flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-bold text-[#1B2A4A]">Recent Property Listings</h3>
-              <p className="text-xs text-slate-500">Managed land entries ready for preview and PDF download</p>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <Link href="/properties/add"
+            style={{ background:'#111827', borderRadius:16, padding:'24px', textDecoration:'none', display:'block' }}
+            className="card-hover">
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:10 }}>
+              <div style={{ width:40, height:40, background:'rgba(240,165,0,0.12)', borderRadius:10,
+                display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Plus size={20} style={{ color:'#F0A500' }}/>
+              </div>
+              <span style={{ fontSize:14, fontWeight:800, color:'#fff' }}>Add New Property</span>
             </div>
-            <Link
-              href="/properties"
-              className="text-xs font-bold text-[#1B2A4A] hover:text-[#D4AF37] flex items-center gap-1 transition"
-            >
-              <span>View All Properties ({properties.length})</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+            <p style={{ fontSize:12, color:'rgba(255,255,255,0.45)', lineHeight:1.6 }}>
+              Create a new land property listing and generate its A4 PDF specification sheet.
+            </p>
+            <div style={{ marginTop:16, display:'flex', alignItems:'center', gap:6, color:'#F0A500', fontSize:12, fontWeight:700 }}>
+              Get started <ArrowRight size={13}/>
+            </div>
+          </Link>
+
+          <Link href="/pdf-generator"
+            style={{ background:'linear-gradient(135deg,#FFF8E6,#FFF0CC)', borderRadius:16, padding:'24px',
+              textDecoration:'none', display:'block', border:'1px solid rgba(240,165,0,0.3)' }}
+            className="card-hover">
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:10 }}>
+              <div style={{ width:40, height:40, background:'rgba(240,165,0,0.15)', borderRadius:10,
+                display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <FileCheck2 size={20} style={{ color:'#F0A500' }}/>
+              </div>
+              <span style={{ fontSize:14, fontWeight:800, color:'#0F172A' }}>PDF Generator Studio</span>
+            </div>
+            <p style={{ fontSize:12, color:'#78716C', lineHeight:1.6 }}>
+              Live A4 PDF preview and instant download for any property in your directory.
+            </p>
+            <div style={{ marginTop:16, display:'flex', alignItems:'center', gap:6, color:'#92400E', fontSize:12, fontWeight:700 }}>
+              Open Studio <ArrowRight size={13}/>
+            </div>
+          </Link>
+
+          <Link href="/properties"
+            style={{ background:'#fff', borderRadius:16, padding:'24px', textDecoration:'none',
+              display:'block', border:'1px solid #E2E8F0' }}
+            className="card-hover">
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:10 }}>
+              <div style={{ width:40, height:40, background:'#EFF6FF', borderRadius:10,
+                display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Building2 size={20} style={{ color:'#3B82F6' }}/>
+              </div>
+              <span style={{ fontSize:14, fontWeight:800, color:'#0F172A' }}>Properties Directory</span>
+            </div>
+            <p style={{ fontSize:12, color:'#64748B', lineHeight:1.6 }}>
+              Browse, search, and filter your entire property portfolio in one view.
+            </p>
+            <div style={{ marginTop:16, display:'flex', alignItems:'center', gap:6, color:'#3B82F6', fontSize:12, fontWeight:700 }}>
+              View all <ArrowRight size={13}/>
+            </div>
+          </Link>
+        </div>
+
+        {/* Recent Properties */}
+        <div style={{ background:'#fff', borderRadius:16, border:'1px solid #E2E8F0', overflow:'hidden' }}>
+          <div style={{ padding:'18px 24px', borderBottom:'1px solid #F1F5F9', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+            <div>
+              <h2 style={{ fontSize:14, fontWeight:800, color:'#0F172A' }}>Recent Properties</h2>
+              <p style={{ fontSize:11, color:'#64748B', marginTop:2 }}>Latest additions & updates</p>
+            </div>
+            <Link href="/properties"
+              style={{ fontSize:11, fontWeight:700, color:'#F0A500', textDecoration:'none',
+                display:'flex', alignItems:'center', gap:4 }}>
+              View all <ArrowRight size={12}/>
             </Link>
           </div>
 
-          {properties.length === 0 ? (
-            <div className="p-12 text-center text-slate-400 space-y-3">
-              <Building2 className="w-10 h-10 mx-auto stroke-1" />
-              <p className="text-xs font-medium">No properties found.</p>
-              <Link
-                href="/properties/add"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#1B2A4A] text-white text-xs font-semibold"
-              >
-                <Plus className="w-4 h-4 text-[#D4AF37]" />
-                <span>Add First Property</span>
+          {recent.length === 0 ? (
+            <div style={{ padding:'48px 24px', textAlign:'center' }}>
+              <Building2 size={40} style={{ color:'#CBD5E1', margin:'0 auto 12px' }}/>
+              <p style={{ fontSize:13, fontWeight:700, color:'#475569' }}>No properties yet</p>
+              <p style={{ fontSize:11, color:'#94A3B8', marginTop:4 }}>Add your first property to get started</p>
+              <Link href="/properties/add"
+                className="btn-navy"
+                style={{ display:'inline-flex', alignItems:'center', gap:6, marginTop:16,
+                  padding:'8px 18px', borderRadius:10, fontSize:12, textDecoration:'none', fontWeight:700 }}>
+                <Plus size={13} style={{ color:'#F0A500' }}/> Add Property
               </Link>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
-              {properties.slice(0, 5).map((prop) => (
-                <div key={prop.id} className="p-4 hover:bg-slate-50 flex items-center justify-between transition">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-[#1B2A4A]/5 border border-[#1B2A4A]/10 font-bold text-[#1B2A4A] flex items-center justify-center text-xs">
-                      {prop.identification.propertyType.slice(0, 2).toUpperCase()}
+            <div>
+              {recent.map((p, i) => (
+                <div key={p.id}
+                  style={{
+                    padding:'14px 24px', display:'flex', alignItems:'center', gap:16,
+                    borderBottom: i < recent.length-1 ? '1px solid #F8FAFC' : 'none',
+                    transition:'background 0.15s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.background='#FAFAFA'}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.background=''}
+                >
+                  {/* Icon */}
+                  <div style={{ width:36, height:36, background:'#F1F5F9', borderRadius:10,
+                    display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                    <Building2 size={16} style={{ color:'#64748B' }}/>
+                  </div>
+
+                  {/* Info */}
+                  <div style={{ flex:1, minWidth:0 }}>
+                    <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <span style={{ fontSize:12, fontWeight:800, color:'#0F172A' }}>
+                        {p.identification.refNo}
+                      </span>
+                      <span style={{
+                        fontSize:9, fontWeight:700, padding:'2px 7px', borderRadius:20,
+                        textTransform:'uppercase', letterSpacing:'0.05em',
+                        ...(p.status==='Active'
+                          ? { background:'#ECFDF5', color:'#047857', border:'1px solid #A7F3D0' }
+                          : p.status==='Draft'
+                          ? { background:'#FFFBEB', color:'#B45309', border:'1px solid #FDE68A' }
+                          : { background:'#F8FAFC', color:'#475569', border:'1px solid #E2E8F0' })
+                      }}>{p.status}</span>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-[#1B2A4A]">{prop.identification.refNo}</span>
-                        <span
-                          className={`px-2 py-0.5 text-[9px] font-bold rounded-full ${
-                            prop.status === 'Active'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : prop.status === 'Draft'
-                              ? 'bg-amber-100 text-amber-800'
-                              : 'bg-slate-100 text-slate-700'
-                          }`}
-                        >
-                          {prop.status}
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-mono">v{prop.version}.0</span>
-                      </div>
-                      <h4 className="text-xs font-semibold text-slate-800">{prop.identification.propertyName}</h4>
-                      <p className="text-[11px] text-slate-500">
-                        {prop.identification.location} | {prop.siteDetails.totalExtent || 'N/A'} | Facing: {prop.siteDetails.facing}
-                      </p>
+                    <div style={{ fontSize:12, fontWeight:600, color:'#475569', marginTop:1 }}>
+                      {p.identification.propertyName || '—'}
+                    </div>
+                    <div style={{ fontSize:11, color:'#94A3B8', display:'flex', alignItems:'center', gap:4, marginTop:2 }}>
+                      <MapPin size={10}/>{p.identification.location || '—'}
+                      <span style={{ margin:'0 4px' }}>·</span>
+                      <Calendar size={10}/>{new Date(p.updatedAt).toLocaleDateString('en-IN')}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href={`/properties/${prop.id}/pdf`}
-                      className="px-3 py-1.5 rounded-md bg-[#FAF5E8] border border-[#D4AF37]/50 text-[#1B2A4A] text-xs font-bold hover:bg-[#F3E8C9] transition flex items-center gap-1"
-                    >
-                      <Download className="w-3.5 h-3.5 text-[#D4AF37]" />
-                      <span>PDF Studio</span>
+                  {/* Price */}
+                  <div style={{ textAlign:'right', flexShrink:0 }}>
+                    <div style={{ fontSize:13, fontWeight:900, color:'#0F172A' }}>
+                      {p.salePricing?.totalAskingPrice || '—'}
+                    </div>
+                    <div style={{ fontSize:10, color:'#94A3B8', marginTop:1 }}>
+                      {p.identification.propertyType}
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div style={{ display:'flex', gap:6, flexShrink:0 }}>
+                    <Link href={`/properties/${p.id}/pdf`}
+                      style={{ padding:'6px 10px', borderRadius:8, background:'#FFF8E6',
+                        border:'1px solid rgba(240,165,0,0.3)', textDecoration:'none',
+                        display:'flex', alignItems:'center' }} title="Preview PDF">
+                      <Eye size={13} style={{ color:'#F0A500' }}/>
                     </Link>
-
-                    <Link
-                      href={`/properties/${prop.id}/edit`}
-                      className="p-1.5 text-slate-500 hover:text-blue-600 rounded hover:bg-slate-100"
-                      title="Edit"
-                    >
-                      <Edit className="w-4 h-4" />
+                    <Link href={`/properties/${p.id}/edit`}
+                      style={{ padding:'6px 10px', borderRadius:8, background:'#F1F5F9',
+                        border:'1px solid #E2E8F0', textDecoration:'none',
+                        display:'flex', alignItems:'center' }} title="Edit">
+                      <Edit size={13} style={{ color:'#64748B' }}/>
                     </Link>
-
-                    <button
-                      onClick={() => handleDuplicate(prop.id)}
-                      className="p-1.5 text-slate-500 hover:text-amber-600 rounded hover:bg-slate-100"
-                      title="Duplicate"
-                    >
-                      <Copy className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      onClick={() => handleDelete(prop.id)}
-                      className="p-1.5 text-slate-500 hover:text-red-600 rounded hover:bg-slate-100"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
                   </div>
                 </div>
               ))}

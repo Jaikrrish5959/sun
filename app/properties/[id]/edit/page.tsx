@@ -22,7 +22,7 @@ export default function EditPropertyPage({ params }: { params: Promise<{ id: str
 
   if (!property) {
     return (
-      <div>
+      <div className="animate-fade-in">
         <Header title="Edit Property" />
         <div className="p-12 max-w-xl mx-auto text-center space-y-4">
           <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
@@ -30,9 +30,9 @@ export default function EditPropertyPage({ params }: { params: Promise<{ id: str
           <p className="text-xs text-slate-500">The requested property ID could not be located in storage.</p>
           <button
             onClick={() => router.push('/properties')}
-            className="px-4 py-2 bg-[#1B2A4A] text-white text-xs font-bold rounded-lg"
+            className="px-5 py-2.5 bg-[#090E22] text-white text-xs font-bold rounded-xl"
           >
-            Back to Properties List
+            Back to Properties Directory
           </button>
         </div>
       </div>
@@ -40,13 +40,13 @@ export default function EditPropertyPage({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div>
+    <div className="animate-fade-in pb-12">
       <Header
         title={`Edit Property: ${property.identification.refNo}`}
         subtitle={`Updating property details for ${property.identification.propertyName}`}
       />
 
-      <div className="p-8 max-w-7xl mx-auto">
+      <div className="p-6 md:p-8 lg:p-10">
         <PropertyForm initialData={property} isEdit={true} />
       </div>
     </div>

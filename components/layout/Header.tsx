@@ -1,78 +1,112 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Search, Plus, FileText, Bell } from 'lucide-react';
+import { CommandPalette } from '@/components/ui/CommandPalette';
 
 interface HeaderProps {
-  title?: string;
+  title: string;
   subtitle?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  title = 'Dashboard Overview',
-  subtitle = 'Manage land properties and generate exact PDF specification sheets',
-}) => {
+export const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
+  const [cmdOpen, setCmdOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-20 bg-white border-b px-8 py-3.5 flex items-center justify-between shadow-sm"
-            style={{ borderColor: '#E2E8F0' }}>
-      <div>
-        <h1 className="text-lg font-extrabold tracking-tight" style={{ color: '#1A2455' }}>
-          {title}
-        </h1>
-        {subtitle && (
-          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
-            {subtitle}
-          </p>
-        )}
-      </div>
+    <>
+      <header
+        className="sticky top-0 z-20 flex items-center justify-between gap-4 px-8 py-4"
+        style={{
+          background: 'rgba(255,255,255,0.95)',
+          backdropFilter: 'blur(12px)',
+          borderBottom: '1px solid #E2E8F0',
+        }}
+      >
+        {/* Left: Title + subtitle */}
+        <div className="min-w-0">
+          <h1 style={{ fontSize:18, fontWeight:900, color:'#0F172A', lineHeight:1.2 }} className="truncate">
+            {title}
+          </h1>
+          {subtitle && (
+            <p style={{ fontSize:11, color:'#64748B', marginTop:2, fontWeight:500 }}>
+              {subtitle}
+            </p>
+          )}
+        </div>
 
-      <div className="flex items-center gap-3">
-        {/* Quick Search */}
-        <Link
-          href="/search"
-          className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition"
-          style={{ backgroundColor: '#F4F6FA', border: '1px solid #E2E8F0', color: '#64748B' }}
-        >
-          <Search className="w-3.5 h-3.5" style={{ color: '#94A3B8' }} />
-          <span>Quick search...</span>
-          <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded ml-1"
-               style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', color: '#94A3B8' }}>
-            ⌘K
-          </kbd>
-        </Link>
+        {/* Right: Actions */}
+        <div className="flex items-center gap-2.5 flex-shrink-0">
+          {/* Search pill */}
+          <button
+            onClick={() => setCmdOpen(true)}
+            className="flex items-center gap-2 rounded-xl text-xs"
+            style={{
+              padding:'8px 14px',
+              background:'#F8FAFC',
+              border:'1px solid #E2E8F0',
+              color:'#94A3B8',
+              fontWeight:500,
+              cursor:'pointer',
+              whiteSpace:'nowrap',
+            }}
+          >
+            <Search size={13}/>
+            <span>Search properties...</span>
+            <kbd style={{
+              fontSize:10, padding:'1px 5px', borderRadius:5,
+              background:'#fff', border:'1px solid #E2E8F0',
+              color:'#94A3B8', fontFamily:'monospace', fontWeight:700, marginLeft:4,
+            }}>⌘K</kbd>
+          </button>
 
-        {/* Add Property */}
-        <Link
-          href="/properties/add"
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition btn-navy"
-        >
-          <Plus className="w-4 h-4" style={{ color: '#F0A500' }} />
-          <span>Add Property</span>
-        </Link>
+          {/* Add Property */}
+          <Link
+            href="/properties/add"
+            className="btn-navy flex items-center gap-1.5 rounded-xl text-xs"
+            style={{ padding:'8px 14px', textDecoration:'none', fontSize:12 }}
+          >
+            <Plus size={13} style={{ color:'#F0A500' }}/>
+            Add Property
+          </Link>
 
-        {/* PDF Studio */}
-        <Link
-          href="/pdf-generator"
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold transition"
-          style={{
-            backgroundColor: '#FFF8E6',
-            border: '1.5px solid rgba(240,165,0,0.4)',
-            color: '#1A2455',
-          }}
-        >
-          <FileText className="w-4 h-4" style={{ color: '#F0A500' }} />
-          <span>Live PDF Studio</span>
-        </Link>
+          {/* PDF Studio */}
+          <Link
+            href="/pdf-generator"
+            className="flex items-center gap-1.5 rounded-xl text-xs"
+            style={{
+              padding:'8px 14px',
+              background:'#FFF8E6',
+              border:'1px solid rgba(240,165,0,0.35)',
+              color:'#92400E',
+              fontWeight:700,
+              textDecoration:'none',
+              fontSize:12,
+            }}
+          >
+            <FileText size={13} style={{ color:'#F0A500' }}/>
+            PDF Studio
+          </Link>
 
-        {/* Notification Bell */}
-        <button className="relative p-2 rounded-xl transition"
-                style={{ color: '#94A3B8' }}>
-          <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
-                style={{ backgroundColor: '#F0A500' }} />
-        </button>
-      </div>
-    </header>
+          {/* Bell */}
+          <button
+            style={{
+              position:'relative', padding:8, borderRadius:10,
+              background:'#F8FAFC', border:'1px solid #E2E8F0',
+              cursor:'pointer', color:'#64748B',
+            }}
+          >
+            <Bell size={15}/>
+            <span className="pulse-dot" style={{
+              position:'absolute', top:6, right:6,
+              width:7, height:7, borderRadius:'50%',
+              background:'#F0A500', display:'block',
+            }}/>
+          </button>
+        </div>
+      </header>
+
+      <CommandPalette isOpen={cmdOpen} onClose={() => setCmdOpen(false)}/>
+    </>
   );
 };

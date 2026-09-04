@@ -6,7 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { PDFStudio } from '@/components/pdf/PDFStudio';
 import { getStoredProperties } from '@/lib/storage';
 import { Property } from '@/lib/types';
-import { FileCheck2, Building2, ChevronRight, Plus } from 'lucide-react';
+import { FileCheck2, Building2, Plus, Sparkles } from 'lucide-react';
 
 export default function GlobalPDFGeneratorPage() {
   const [properties, setProperties] = useState<Property[]>([]);
@@ -23,25 +23,27 @@ export default function GlobalPDFGeneratorPage() {
   const selectedProperty = properties.find((p) => p.id === selectedPropertyId) || properties[0];
 
   return (
-    <div>
+    <div className="animate-fade-in pb-12">
       <Header
         title="PDF Generator Studio"
         subtitle="Live A4 PDF Specification Sheet generation engine controlled entirely from the dashboard"
       />
 
-      <div className="p-8 space-y-6 max-w-7xl mx-auto">
-        {/* Selector Header Bar */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1 min-w-[300px]">
-            <Building2 className="w-5 h-5 text-[#1B2A4A]" />
-            <div>
-              <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+      <div className="p-8 md:p-10 lg:p-12 space-y-8 max-w-7xl mx-auto">
+        {/* Top Active Property Selector Card */}
+        <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-6">
+          <div className="flex items-center gap-4 flex-1 min-w-[320px]">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-[#F0A500] flex-shrink-0">
+              <Building2 className="w-6 h-6" />
+            </div>
+            <div className="flex-1 space-y-1">
+              <label className="block text-[10px] font-black uppercase tracking-wider text-slate-400">
                 Select Active Property for PDF Generation
               </label>
               <select
                 value={selectedPropertyId}
                 onChange={(e) => setSelectedPropertyId(e.target.value)}
-                className="w-full mt-1 px-3 py-2 text-xs font-bold text-[#1B2A4A] border rounded-lg border-slate-300 bg-slate-50 focus:ring-2 focus:ring-[#1B2A4A]"
+                className="w-full px-4 py-3 text-xs font-black text-[#0F172A] border border-slate-200 rounded-xl bg-slate-50/70 focus:bg-white focus:border-[#F0A500] transition"
               >
                 {properties.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -52,29 +54,30 @@ export default function GlobalPDFGeneratorPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Link
               href="/properties/add"
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#1B2A4A] text-white text-xs font-bold hover:bg-[#0F1E36] transition shadow-xs"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black btn-navy transition shadow-xs whitespace-nowrap"
             >
-              <Plus className="w-4 h-4 text-[#D4AF37]" />
+              <Plus className="w-4 h-4 text-[#F0A500]" />
               <span>Create New Property</span>
             </Link>
           </div>
         </div>
 
+        {/* Main PDF Studio Workspace */}
         {selectedProperty ? (
           <PDFStudio property={selectedProperty} />
         ) : (
-          <div className="bg-white p-12 rounded-xl text-center border border-slate-200 space-y-4">
+          <div className="bg-white p-16 rounded-3xl text-center border border-slate-200/80 shadow-xs space-y-4">
             <FileCheck2 className="w-12 h-12 text-slate-300 mx-auto stroke-1" />
-            <h3 className="text-base font-bold text-slate-700">No Properties Found in System</h3>
-            <p className="text-xs text-slate-500">Add a land property to launch the Live PDF Studio.</p>
+            <h3 className="text-base font-extrabold text-slate-800">No Properties Found in System</h3>
+            <p className="text-xs text-slate-500 font-medium">Add a land property to launch the Live PDF Studio.</p>
             <Link
               href="/properties/add"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#1B2A4A] text-white text-xs font-bold"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-navy text-xs font-extrabold"
             >
-              <Plus className="w-4 h-4 text-[#D4AF37]" />
+              <Plus className="w-4 h-4 text-[#F0A500]" />
               <span>Add Property Now</span>
             </Link>
           </div>

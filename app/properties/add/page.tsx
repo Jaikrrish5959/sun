@@ -6,10 +6,13 @@ import { PropertyForm } from '@/components/forms/PropertyForm';
 
 export default function AddPropertyPage() {
   return (
-    <div>
-      <Header title="Add New Property" subtitle="Enter property details to generate an authoritative Land Property Details Sheet" />
+    <div className="animate-fade-in pb-12">
+      <Header
+        title="Add New Property"
+        subtitle="Enter property details to generate the Land Property Details Sheet"
+      />
 
-      <div className="p-8 max-w-7xl mx-auto">
+      <div className="p-6 md:p-8 lg:p-10">
         <PropertyForm />
       </div>
     </div>

@@ -1,176 +1,153 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import "tailwindcss";
 
-/* ─── SUN REALTORS Brand Design System ─── */
+/* ─── Design Tokens ─── */
 :root {
-  /* Brand Colors - Exact from Logo */
-  --sun-navy:       #1A2455;
-  --sun-navy-dark:  #111A3E;
-  --sun-navy-mid:   #1E2D6B;
-  --sun-gold:       #F0A500;
-  --sun-gold-light: #FFC641;
-  --sun-gold-dark:  #C8880A;
-  --sun-gold-pale:  #FFF8E6;
-  --sun-gold-muted: #F5E6C0;
-
-  /* UI Neutrals */
-  --bg-main:        #F4F6FA;
-  --bg-white:       #FFFFFF;
-  --border-light:   #E2E8F0;
-  --border-mid:     #CBD5E1;
-  --text-main:      #1E293B;
-  --text-muted:     #64748B;
-  --text-faint:     #94A3B8;
-
-  /* Status Colors */
-  --green-soft:     #D1FAE5;
-  --green-text:     #065F46;
-  --amber-soft:     #FEF3C7;
-  --amber-text:     #92400E;
-  --red-soft:       #FEE2E2;
-  --red-text:       #991B1B;
+  --gold:        #F0A500;
+  --gold-light:  #FFC641;
+  --gold-pale:   #FFF8E6;
+  --gold-border: #F5D680;
+  --navy:        #111827;
+  --navy-mid:    #1E2D6B;
+  --navy-deep:   #090E22;
+  --bg:          #F1F5F9;
+  --surface:     #FFFFFF;
+  --border:      #E2E8F0;
+  --text:        #0F172A;
+  --muted:       #64748B;
+  --faint:       #94A3B8;
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: var(--bg-main);
-  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
   font-size: 14px;
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Scrollbar Styling ─── */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--sun-gold-dark);
-  border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--sun-gold);
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(240,165,0,0.3); }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(240,165,0,0.6); }
+
+/* ─── Focus ring ─── */
+input:focus, select:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px rgba(240,165,0,0.15) !important;
+  background: #fff !important;
 }
 
-/* ─── Gold Button ─── */
+/* ─── Buttons ─── */
 .btn-gold {
-  background: linear-gradient(135deg, var(--sun-gold) 0%, var(--sun-gold-dark) 100%);
-  color: var(--sun-navy-dark);
+  background: linear-gradient(135deg, #FFC641 0%, #F0A500 100%);
+  color: #0F172A;
   font-weight: 800;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 12px rgba(240,165,0,0.25);
 }
-.btn-gold:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 4px 20px rgba(240, 165, 0, 0.4);
+.btn-gold:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow: 0 4px 20px rgba(240,165,0,0.4);
   transform: translateY(-1px);
 }
+.btn-gold:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
-/* ─── Navy Button ─── */
 .btn-navy {
-  background: var(--sun-navy);
-  color: white;
+  background: var(--navy);
+  color: #fff;
   font-weight: 700;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.btn-navy:hover {
-  background: var(--sun-navy-dark);
+.btn-navy:hover:not(:disabled) {
+  background: #1E2D6B;
+  transform: translateY(-1px);
 }
 
-/* ─── Gold Shimmer Animation ─── */
-@keyframes goldShimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+.btn-ghost {
+  background: #F1F5F9;
+  color: #475569;
+  font-weight: 600;
+  border: 1px solid #E2E8F0;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
+.btn-ghost:hover { background: #E2E8F0; color: #1E293B; }
 
-.gold-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--sun-gold-dark) 0%,
-    var(--sun-gold-light) 50%,
-    var(--sun-gold-dark) 100%
-  );
+/* ─── Animations ─── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 0.3s ease forwards; }
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-slide-up { animation: slide-up 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.8); }
+}
+.pulse-dot { animation: pulse-dot 2s ease infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 1s linear infinite; }
+
+/* ─── Gold shimmer text ─── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+.gold-text {
+  background: linear-gradient(90deg, #C8880A 0%, #FFC641 50%, #C8880A 100%);
   background-size: 200% auto;
-  animation: goldShimmer 3s linear infinite;
+  animation: shimmer 3s linear infinite;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* ─── Pulse / Active Dot ─── */
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-.pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
-}
+/* ─── Status badges ─── */
+.badge-active   { background:#ECFDF5; color:#047857; border:1px solid #A7F3D0; }
+.badge-draft    { background:#FFFBEB; color:#B45309; border:1px solid #FDE68A; }
+.badge-archived { background:#F8FAFC; color:#475569; border:1px solid #E2E8F0; }
 
-/* ─── Fade In ─── */
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in {
-  animation: fade-in 0.3s ease;
-}
-
-/* ─── Form Focus Ring ─── */
-input:focus,
-select:focus,
-textarea:focus {
-  outline: 2px solid var(--sun-gold);
-  outline-offset: 0px;
-  border-color: var(--sun-gold) !important;
-}
-
-/* ─── Table Alternating Rows ─── */
-.tr-stripe:nth-child(even) {
-  background-color: #F8FAFC;
-}
-
-/* ─── Nav Active State ─── */
-.nav-active {
-  background: linear-gradient(90deg, var(--sun-gold) 0%, var(--sun-gold-dark) 100%);
-  color: var(--sun-navy-dark);
-  box-shadow: 0 2px 12px rgba(240, 165, 0, 0.3);
-}
-
-/* ─── Card Hover ─── */
+/* ─── Card hover ─── */
 .card-hover {
-  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
 }
 .card-hover:hover {
-  box-shadow: 0 8px 32px rgba(26, 36, 85, 0.12);
-  border-color: rgba(240, 165, 0, 0.4);
+  box-shadow: 0 8px 30px rgba(15,23,42,0.08);
+  border-color: rgba(240,165,0,0.4) !important;
   transform: translateY(-2px);
 }
 
-/* ─── Login Page ─── */
-.login-bg {
-  background: linear-gradient(135deg, var(--sun-navy-dark) 0%, var(--sun-navy) 50%, var(--sun-navy-mid) 100%);
+/* ─── Sidebar active nav ─── */
+.nav-item-active {
+  background: rgba(240,165,0,0.08);
+  border-left: 3px solid #F0A500;
+  color: #ffffff !important;
 }
 
-/* ─── Sidebar gradient ─── */
-.sidebar-bg {
-  background: linear-gradient(180deg, #111A3E 0%, #1A2455 60%, #1E2D6B 100%);
+/* ─── Print ─── */
+@media print {
+  nav, aside, header { display: none !important; }
+  main { margin: 0 !important; }
 }
