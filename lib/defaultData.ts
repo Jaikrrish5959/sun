@@ -2,20 +2,20 @@ import { CompanySettings, Property } from './types';
 
 export const defaultCompanySettings: CompanySettings = {
   companyName: 'SUN REALTORS',
-  tagline: 'Trusted Real Estate & Property Consultants',
-  regNumber: 'REG / TN / 2024 / 08912',
+  tagline: 'Finding The Right Place For You',
+  regNumber: 'TNRERA / 2024 / SUN / 05333',
   logoUrl: '',
-  contactPerson: 'K. Sunder Raman (Managing Director)',
-  phone: '+91 98400 12345',
-  whatsapp: '+91 98400 12345',
-  email: 'info@sunrealtors.in',
-  website: 'www.sunrealtors.in',
-  address: 'No. 45, Sun Towers, 2nd Floor, Anna Salai, Guindy',
-  cityStateZip: 'Chennai, Tamil Nadu - 600032',
+  contactPerson: 'Suresh Kumar P G (Managing Director)',
+  phone: '+91 98941 05333',
+  whatsapp: '+91 99427 05333',
+  email: 'sunrealtorsindia@gmail.com',
+  website: 'www.sunrealtorsindia.com',
+  address: '814 RKM Complex, Lakshminagar',
+  cityStateZip: 'Erode – 638316, Tamil Nadu',
   disclaimerText:
-    'Disclaimer: The details provided herein are based on information furnished by the property owner/vendor and physical verification conducted by SUN REALTORS. Buyers are advised to verify documents and legal titles independently prior to transaction. SUN REALTORS holds no liability for discrepancies.',
-  themePrimaryColor: '#1B2A4A',
-  themeAccentColor: '#D4AF37',
+    'Disclaimer: The details provided herein are based on information furnished by the property owner/vendor and physical verification conducted by SUN REALTORS. Buyers are advised to verify documents and legal titles independently prior to transaction. SUN REALTORS holds no liability for discrepancies. Contact: sunrealtorsindia@gmail.com | +91 98941 05333 | www.sunrealtorsindia.com',
+  themePrimaryColor: '#1A2455',
+  themeAccentColor: '#F0A500',
 };
 
 export const sampleProperties: Property[] = [

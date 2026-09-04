@@ -2,55 +2,75 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Search, Plus, FileText, Bell, Sparkles } from 'lucide-react';
+import { Search, Plus, FileText, Bell } from 'lucide-react';
 
 interface HeaderProps {
   title?: string;
   subtitle?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title = 'Dashboard Overview', subtitle = 'Manage land properties and generate exact PDF specification sheets' }) => {
+export const Header: React.FC<HeaderProps> = ({
+  title = 'Dashboard Overview',
+  subtitle = 'Manage land properties and generate exact PDF specification sheets',
+}) => {
   return (
-    <header className="sticky top-0 z-20 bg-white/95 backdrop-blur-md border-b border-slate-200 px-8 py-4 flex items-center justify-between shadow-xs">
+    <header className="sticky top-0 z-20 bg-white border-b px-8 py-3.5 flex items-center justify-between shadow-sm"
+            style={{ borderColor: '#E2E8F0' }}>
       <div>
-        <h1 className="text-xl font-bold text-[#1B2A4A] tracking-tight flex items-center gap-2">
+        <h1 className="text-lg font-extrabold tracking-tight" style={{ color: '#1A2455' }}>
           {title}
         </h1>
-        {subtitle && <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>}
+        {subtitle && (
+          <p className="text-xs mt-0.5" style={{ color: '#64748B' }}>
+            {subtitle}
+          </p>
+        )}
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {/* Quick Search */}
         <Link
           href="/search"
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-slate-100 border border-slate-200 text-slate-500 text-xs hover:bg-slate-200/70 transition"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs transition"
+          style={{ backgroundColor: '#F4F6FA', border: '1px solid #E2E8F0', color: '#64748B' }}
         >
-          <Search className="w-3.5 h-3.5 text-slate-400" />
-          <span>Quick property search...</span>
-          <kbd className="px-1.5 py-0.5 text-[10px] bg-white rounded text-slate-400 border border-slate-300 shadow-2xs font-mono ml-2">⌘K</kbd>
+          <Search className="w-3.5 h-3.5" style={{ color: '#94A3B8' }} />
+          <span>Quick search...</span>
+          <kbd className="px-1.5 py-0.5 text-[10px] font-mono rounded ml-1"
+               style={{ backgroundColor: 'white', border: '1px solid #E2E8F0', color: '#94A3B8' }}>
+            ⌘K
+          </kbd>
         </Link>
 
-        {/* Add Property Quick Action */}
+        {/* Add Property */}
         <Link
           href="/properties/add"
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1B2A4A] text-white text-xs font-semibold hover:bg-[#0F1E36] transition shadow-xs"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition btn-navy"
         >
-          <Plus className="w-4 h-4 text-[#D4AF37]" />
+          <Plus className="w-4 h-4" style={{ color: '#F0A500' }} />
           <span>Add Property</span>
         </Link>
 
-        {/* PDF Generator Direct */}
+        {/* PDF Studio */}
         <Link
           href="/pdf-generator"
-          className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#FAF5E8] border border-[#D4AF37]/40 text-[#1B2A4A] text-xs font-bold hover:bg-[#F3E8C9] transition shadow-2xs"
+          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-extrabold transition"
+          style={{
+            backgroundColor: '#FFF8E6',
+            border: '1.5px solid rgba(240,165,0,0.4)',
+            color: '#1A2455',
+          }}
         >
-          <FileText className="w-4 h-4 text-[#D4AF37]" />
+          <FileText className="w-4 h-4" style={{ color: '#F0A500' }} />
           <span>Live PDF Studio</span>
         </Link>
 
-        <button className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 relative">
+        {/* Notification Bell */}
+        <button className="relative p-2 rounded-xl transition"
+                style={{ color: '#94A3B8' }}>
           <Bell className="w-4 h-4" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#D4AF37]" />
+          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full"
+                style={{ backgroundColor: '#F0A500' }} />
         </button>
       </div>
     </header>
